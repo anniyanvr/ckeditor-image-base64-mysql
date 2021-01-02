@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<!--
+	Copyright (c) 2014-2020, CKSource - Frederico Knabben. All rights reserved.
+	This file is licensed under the terms of the MIT License (see LICENSE.md).
+-->
+
+<html lang="en" dir="ltr">
+
+</html>
+
+<head>
+    <title>CKEditor 5 ClassicEditor build</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="icon" type="image/png" href="https://c.cksource.com/a/1/logos/ckeditor5.png">
+    <link rel="stylesheet" type="text/css" href="styles.css">
+</head>
+
+<body data-editor="ClassicEditor" data-collaboration="false">
+    <main>
+        <h1>Classic editor</h1>
+        <form action="[URL]" method="post">
+            <textarea name="content" id="editor">
+			</textarea>
+            <button id="submit">Submit</button>
+            <!--input type="submit" value="Submit"></p-->
+        </form>
+    </main>
+    <script src="../build/ckeditor.js"></script>
+    <script>
+        let editor;
+        ClassicEditor
+            .create(document.querySelector('#editor'), {
+
+                toolbar: {
+                    items: [
+                        'heading',
+                        '|',
+                        'bold',
+                        'italic',
+                        'link',
+                        'bulletedList',
+                        'numberedList',
+                        '|',
+                        'indent',
+                        'outdent',
+                        '|',
+                        'imageUpload',
+                        'blockQuote',
+                        'insertTable',
+                        'mediaEmbed',
+                        'undo',
+                        'redo'
+                    ]
+                },
+                language: 'en',
+                image: {
+                    toolbar: [
+                        'imageTextAlternative',
+                        'imageStyle:full',
+                        'imageStyle:side'
+                    ]
+                },
+                table: {
+                    contentToolbar: [
+                        'tableColumn',
+                        'tableRow',
+                        'mergeTableCells'
+                    ]
+                },
+                licenseKey: '',
+
+            })
+            .then(neweditor => {
+                console.log(neweditor);
+                console.log(neweditor.getData());
+                //window.editor = neweditor;
+                editor = neweditor;
+            })
+            .catch(error => {
+                console.error('Oops, something went wrong!');
+                console.error('Please, report the following error on https://github.com/ckeditor/ckeditor5/issues with the build id and the error stack trace:');
+                console.warn('Build id: 9x3ve0vzsv96-8o65j7c6blw0');
+                console.error(error);
+            });
+
+        document.querySelector('#submit').addEventListener('click', () => {
+            const editorData = editor.getData();
+            console.log(editorData);
+            var data = new FormData();
+            data.append("data", editorData);
+            var xhr = new XMLHttpRequest();
+            xhr.withCredentials = true;
+
+            xhr.addEventListener("readystatechange", function() {
+                if (this.readyState === 4) {
+                    console.log(this.responseText);
+                }
+            });
+
+            xhr.open("POST", "http://localhost:3000/api/insertckeditordata");
+            xhr.send(data);
+            alert(editorData);
+        });
+    </script>
+</body> });
+</script>
+</body>cript>
+<script>
+    var xhr = new XMLHttpRequest();
+    xhr.withCredentials = true;
+
+    xhr.addEventListener("readystatechange", function() {
+        if (this.readyState === 4) {
+            //console.log(this.responseJSON);
+            var json = JSON.parse(this.responseText);
+            var results = json[0].report_description;
+            console.log(results);
+            document.getElementById("editor").value = results;
+            editor.setData(results);
+        }
+    });
+
+    xhr.open("GET", "http://localhost:3000/api/ckeditordata/128");
+    xhr.setRequestHeader("Cookie", "JSESSIONID=CE2C4F3699EBDB33DF893213E2891776");
+
+    xhr.send();
+</script>
+</body>
+
+</html>
