@@ -156,15 +156,3 @@ module.exports = (express, connection) => {
 
     return router;
 };
-return router;
-};
-return router;
-};
-return router;
-};
-turn router;
-};
-rn router;
-};
-rn router;
-};
